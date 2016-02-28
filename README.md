@@ -25,7 +25,7 @@ l is the allowed number of missing edges before it makes a clique
 
 The command is
 
-    java GraphMainClass UndirectedGraph.txt k l    //for maximul ckique input k and l as 0
+    java GraphMainClass UndirectedGraph.txt k l    //for maximal ckique input k and l as 0
     
 Sample output when k = 2 and l = 1
 
