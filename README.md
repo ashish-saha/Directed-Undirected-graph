@@ -27,11 +27,17 @@ The command is
 
     java GraphMainClass UndirectedGraph.txt k l    //for maximal ckique input k and l as 0
     
-Sample output when k = 2 and l = 1
+Sample output when k = 3 and l = 1
 
-Computing (2-1) maximal soft cliques!																															
-0 1 3 4 																															
-0 2 3 																						
-1 2 																																	
-2 3 4 																										
+Computing (3-1) maximal soft cliques!
+
+John Mike Lisa Debashish                            
+Friend-Suggestion [Mike, Lisa]
+
+John Lisa Paul                  
+Friend-Suggestion [John, Paul]
+
+Lisa Debashish Paul                     
+Friend-Suggestion [Debashish, Paul]                 
+
 END
