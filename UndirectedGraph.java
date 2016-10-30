@@ -1,8 +1,10 @@
 import java.util.ArrayList;
+import java.util.Vector;
 
 public class UndirectedGraph {
 	int size;
 	SLLSparseM M;
+	Vector <String> friendSuggestion;
 	ArrayList <Integer> myList;
 	ArrayList <ArrayList<Integer>> powerSet = new ArrayList <ArrayList<Integer>> ();
 	
@@ -42,8 +44,11 @@ public class UndirectedGraph {
 	// print an output soft clique in one line
 	 public void printClique(ArrayList<Integer> nlist){
 	   for(int i = 0; i < nlist.size(); ++i)
-	     System.out.print(nlist.get(i) + " ");
-	   System.out.println("");
+	     System.out.print(GraphMainClass.myVector.get(nlist.get(i)) + " ");
+	     System.out.println("");
+	     System.out.println(friendSuggestion);
+	     System.out.println("");
+	     
 	 }
 
 	 // compute maximal soft clique
@@ -117,77 +122,23 @@ public class UndirectedGraph {
 		    }  
 	 }
 
-	 // compute maximal soft clique by using recursion 
-	 // to compute all (k,l) soft cliques using recursion
-	 // you should check the partial subset during generation 
-	 // rather than checking the whole subset
-	 // cliquesize_lower_bd: k
-	 // num_missing_edges: l
-	 public void findMaxSoftCliqueAdvanced(int cliquesize_lower_bd, int num_missing_edges){
-			
-		ArrayList<Integer> tempList = new ArrayList <Integer> ();
-		getAdvanceSets (myList, size, tempList, 0, num_missing_edges);
-						
-		for (int x = 0; x < advanceSoftClique.size(); x++ )	{
-			for (int y = 0; y < advanceSoftClique.size(); y++ )	{
-				
-				if (x==y)	
-					continue;
-
-				if (advanceSoftClique.get(y).containsAll(advanceSoftClique.get(x)))			// if x is subset of some bigger Clique continue to the next x 
-					break;
-						
-				if (y == (advanceSoftClique.size()-1))	{									// x has iterated through all the sets and its not a subset of anything
-					if (advanceSoftClique.get(x).size()<cliquesize_lower_bd)		continue;
-					printClique(advanceSoftClique.get(x));
-				}
-			}
-		}		
-	 }
 	 
-	 
-	 int advanceIndex = 0;
-	 public void getAdvanceSets (ArrayList<Integer> myList,int length,ArrayList<Integer> tempList, int allowedAfter, int num_missing_edges)	{
-		 	
-		if(allowedAfter == length)	return;											//base case
-		else	{
-			for (int i=allowedAfter; i<length; i++)	{
-				tempList.add(myList.get(i));
-
-				if (isClique(tempList, num_missing_edges))	{
-					advanceSoftClique.add(new ArrayList <Integer> ());
-					advanceSoftClique.get(advanceIndex).addAll(tempList);
-					advanceIndex++;
-				}
-				else if (!isClique(tempList, num_missing_edges))	{				//if its not a clique increment the last element
-					int temp = tempList.get(tempList.size()-1);
-					tempList.remove(tempList.size()-1);
-					tempList.add(temp+1);
-					i=i+1;															//increment the allowedAfter as well
-					if (isClique(tempList, num_missing_edges))	{					//since templist is changed, check if the new tempList is a Clique
-						advanceSoftClique.add(new ArrayList <Integer> ());
-						advanceSoftClique.get(advanceIndex).addAll(tempList);
-						advanceIndex++;
-					}
-				}
-				
-				getAdvanceSets(myList, length, tempList, i+1, num_missing_edges);		
-				tempList.remove(tempList.size()-1);
-				
-			}
-		}
-	 }
-	 
-	
 	 public  boolean isClique(ArrayList <Integer> list, int num_missing_edges)	{
 		 
+		 friendSuggestion = new Vector <String> (size, 10);
 		 int missing_edge = 0;							
 		 for (int x: list)	{
 			for (int y: list)	{
 				if (x==y) continue;
 				else if (M.belongsTo(y, x))					// if row y has indegree from x
 					continue;
-				else missing_edge++;						// increment the missing edge
+				else	{ 
+					missing_edge++;						// increment the missing edge
+					if (!friendSuggestion.contains(GraphMainClass.myVector.get(x)))
+							friendSuggestion.add(GraphMainClass.myVector.get(x));
+					if (!friendSuggestion.contains(GraphMainClass.myVector.get(y)))
+						friendSuggestion.add(GraphMainClass.myVector.get(y));
+				}
 			}
 		}
 		

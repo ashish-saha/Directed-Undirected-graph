@@ -1,8 +1,11 @@
 import java.util.Scanner;
+import java.util.Vector;
 import java.util.ArrayList;
 import java.io.File;
 
 public class GraphMainClass {
+
+    static Vector <String> myVector;
 
 	// read and process a graph
 	// for an undirected graph, compute (k-l) maximal soft cliques
@@ -11,7 +14,7 @@ public class GraphMainClass {
 	// parameters.get(1) is l
 	public static void ProcessingGraph(String file_name, ArrayList<Integer> parameters){
 	
-	    Scanner sc = null;
+		Scanner sc = null;
 	    String tmps;
 	    int graph_size = 0;				// number of nodes
 	    boolean isUndirected = true;	// whether the graph is undirected or directed
@@ -41,14 +44,20 @@ public class GraphMainClass {
      if( isUndirected ){  
      // undirected graph
        UG = new UndirectedGraph(graph_size);
-
+       myVector = new Vector <String> (graph_size, 10);
        try {
 	     while (sc.hasNext()) {
 	    	 tmps = sc.next();
-	 		 if(tmps.equals("EDGE")){
+	 		 if(tmps.equals("Friend")){
 	 			 // set an edge
-	 			 int nid1 = sc.nextInt(); // row index
-	 	 		 int nid2 = sc.nextInt(); // col index
+	 			 String temp1 = sc.next();
+	 			 String temp2 = sc.next();
+	 			 
+	 			 if (!myVector.contains(temp1))		myVector.add(temp1);
+	 			 if (!myVector.contains(temp2))		myVector.add(temp2);
+	 			 
+	 			 int nid1 = myVector.indexOf(temp1); // row index
+	 	 		 int nid2 = myVector.indexOf(temp2); // col index
 	 	 		 UG.setEdge(nid1, nid2);
 	 	 	 }else if(tmps.equals("END")){
 	 	 		 // finished, return the matrix
@@ -71,9 +80,6 @@ public class GraphMainClass {
 
        UG.findMaxSoftClique(k, l);
 
-       // // uncomment the following two lines if you want to use the advanced way to generate soft cliques
-       System.out.println("--------- Advanced Generation-----------");
-       UG.findMaxSoftCliqueAdvanced(k, l);
 
      }else{
      // directed graph
@@ -84,6 +90,7 @@ public class GraphMainClass {
 	 		    	tmps = sc.next();
 	 		    	 if(tmps.equals("EDGE")){
 	 	 		    		// set an edge
+	 		    		 	
 	 	 		    		int nid1 = sc.nextInt(); // row index
 	 	 		    		int nid2 = sc.nextInt(); // col index
 	 	 		    		DG.setEdge(nid1, nid2);
